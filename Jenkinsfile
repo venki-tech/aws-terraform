@@ -1,6 +1,10 @@
 // Jenkinsfile
 String credentialsId = 'awsCredentials'
 
+tools {
+    terraform 'terraform'
+}
+
 try {
   stage('checkout') {
     node {
@@ -8,6 +12,7 @@ try {
       checkout scm
     }
   }
+
 
   // Run terraform init
   stage('init') {
