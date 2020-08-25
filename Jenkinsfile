@@ -5,10 +5,6 @@ String credentialsId = 'awsCredentials'
 
 try {
 
-  tools {
-      terraform 'terraform'
-  }
-
   stage('checkout') {
     node {
       cleanWs()
