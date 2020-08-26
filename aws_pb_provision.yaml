@@ -17,7 +17,7 @@
         cache_valid_time: 3600
         name: "{{ packages }}"
         state: present
----
+
 - name: Install software on u2
   hosts: aws_u2
   vars:
@@ -44,7 +44,7 @@
         name: mysql
         state: started
         enabled: yes
----
+
 - name: Install softwares in aws_rhel
   hosts: aws_rhel1
   tasks:
@@ -59,4 +59,3 @@
     service:
       name: httpd
       state: started
----
