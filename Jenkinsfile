@@ -1,8 +1,6 @@
 // Jenkinsfile
 String credentialsId = 'awsCredentials'
 
-
-
 try {
 
   stage('checkout') {
@@ -12,10 +10,8 @@ try {
     }
   }
 
-
-
   // Run terraform init
-  stage('init') {
+  stage('Terraform init') {
     node {
       withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
@@ -31,7 +27,7 @@ try {
   }
 
   // Run terraform plan
-  stage('plan') {
+  stage('Terraform plan') {
     node {
       withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
@@ -49,7 +45,7 @@ try {
   if (env.BRANCH_NAME == 'master') {
 
     // Run terraform apply
-    stage('apply') {
+    stage('Terraform apply') {
       node {
         withCredentials([[
           $class: 'AmazonWebServicesCredentialsBinding',
@@ -65,7 +61,7 @@ try {
     }
 
     // Run terraform show
-    stage('show') {
+    stage('Terraform show') {
       node {
         withCredentials([[
           $class: 'AmazonWebServicesCredentialsBinding',
@@ -79,6 +75,16 @@ try {
         }
       }
     }
+
+    stage('Ansible play') {
+      node {
+          ansiColor('xterm') {
+            sh 'cp /var/jenkins_home/terraform_keys/vvkey .'
+            sh 'ansible-playbook aws_pb_provision.yaml -i inventory.txt'
+          }
+      }
+    }
+
   }
   currentBuild.result = 'SUCCESS'
 }
