@@ -1,0 +1,44 @@
+    pipeline {
+
+        agent { label 'slave'}
+
+        stages {
+            stage ('Set Variables') {
+                steps {
+                    script {
+                        String credentialsId = 'awsCredentials'
+                    }
+                }
+            }
+            
+            stage('Terraform init') {
+              steps {
+                withCredentials([[
+                  $class: 'AmazonWebServicesCredentialsBinding',
+                  credentialsId: credentialsId,
+                  accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                  secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                  ansiColor('xterm') {
+                    sh 'terraform init'
+                  }
+                }
+              }
+            }
+        }
+
+        post {
+            success {
+                echo "Success"
+            }
+            unstable {
+                echo "Unstable"
+            }
+            aborted {
+                echo "Aborted"
+            }
+            failure {
+                echo "FAILURE"
+            }
+        }
+    }
