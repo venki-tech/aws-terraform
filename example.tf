@@ -5,7 +5,7 @@ provider "aws" {
 
 resource "aws_key_pair" "example" {
   key_name   = "vvkey"
-  public_key = file("/var/jenkins_home/terraform_keys/vvkey.pub")
+  public_key = file("vvkey.pub")
 }
 
 resource "aws_instance" "u1" {
@@ -19,7 +19,7 @@ resource "aws_instance" "u1" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("/var/jenkins_home/terraform_keys/vvkey")
+    private_key = file("vvkey")
     host        = self.public_ip
   }
 
@@ -39,7 +39,7 @@ resource "aws_instance" "u2" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("/var/jenkins_home/terraform_keys/vvkey")
+    private_key = file("vvkey")
     host        = self.public_ip
   }
 
@@ -59,7 +59,7 @@ resource "aws_instance" "u2" {
     connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = file("/var/jenkins_home/terraform_keys/vvkey")
+      private_key = file("vvkey")
       host        = self.public_ip
     }
 
