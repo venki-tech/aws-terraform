@@ -14,7 +14,7 @@ pipeline {
         stage('Generate Keys') {
           steps {
             ansiColor('xterm') {
-              sh 'echo -e 'y\n' | ssh-keygen -t rsa -N "" -f vvkey'
+              sh 'echo -e "y\n" | ssh-keygen -t rsa -N "" -f vvkey'
             }
           }
         }
