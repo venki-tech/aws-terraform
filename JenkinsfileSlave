@@ -5,8 +5,10 @@ pipeline {
     stages {
     
         stage('checkout') {
+          steps {
             cleanWs()
             checkout scm
+          }
         }
         
         stage ('Set Variables') {
