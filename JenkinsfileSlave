@@ -10,7 +10,15 @@ pipeline {
                 }
             }
         }
-        
+
+        stage('Generate Keys') {
+          steps {
+            ansiColor('xterm') {
+              sh 'ssh-keygen -t rsa -N "" -f vvkey'
+            }
+          }
+        }
+
         stage('Terraform init') {
           steps {
             withCredentials([[
