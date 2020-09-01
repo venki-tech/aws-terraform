@@ -1,41 +1,65 @@
-    pipeline {
+pipeline {
 
-        agent { label 'slave'}
+    agent { label 'slave'}
 
-        stages {
-            stage ('Set Variables') {
-                steps {
-                    script {
-                        env.credentialsId = "awsCredentials"
-                    }
+    stages {
+        stage ('Set Variables') {
+            steps {
+                script {
+                    env.credentialsId = "awsCredentials"
                 }
             }
-            
-            stage('Terraform init') {
-              steps {
-                withCredentials([[
-                  $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
-                  ansiColor('xterm') {
-                    sh 'terraform init'
-                  }
-                }
+        }
+        
+        stage('Terraform init') {
+          steps {
+            withCredentials([[
+              $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+              ansiColor('xterm') {
+                sh 'terraform init'
               }
             }
+          }
         }
 
-        post {
-            success {
-                echo "Success"
+        stage('Terraform Plan') {
+          steps {
+            withCredentials([[
+              $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+              ansiColor('xterm') {
+                sh 'terraform plan'
+              }
             }
-            unstable {
-                echo "Unstable"
+          }
+        }
+
+        stage('Terraform Apply') {
+          steps {
+            withCredentials([[
+              $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+              ansiColor('xterm') {
+                sh 'terraform apply'
+              }
             }
-            aborted {
-                echo "Aborted"
-            }
-            failure {
-                echo "FAILURE"
-            }
+          }
         }
     }
+
+    post {
+        success {
+            echo "Success"
+        }
+        unstable {
+            echo "Unstable"
+        }
+        aborted {
+            echo "Aborted"
+        }
+        failure {
+            echo "FAILURE"
+        }
+    }
+}
