@@ -6,7 +6,7 @@
             stage ('Set Variables') {
                 steps {
                     script {
-                        env.credentialsId = awsCredentials
+                        env.credentialsId = "awsCredentials"
                     }
                 }
             }
@@ -14,10 +14,7 @@
             stage('Terraform init') {
               steps {
                 withCredentials([[
-                  $class: 'AmazonWebServicesCredentialsBinding',
-                  credentialsId: "${env:credentialsId}",
-                  accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                  secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                  $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                   ansiColor('xterm') {
                     sh 'terraform init'
