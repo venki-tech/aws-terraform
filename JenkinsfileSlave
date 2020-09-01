@@ -3,6 +3,12 @@ pipeline {
     agent { label 'slave'}
 
     stages {
+    
+        stage('checkout') {
+            cleanWs()
+            checkout scm
+        }
+        
         stage ('Set Variables') {
             steps {
                 script {
