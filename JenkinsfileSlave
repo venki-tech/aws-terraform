@@ -6,7 +6,7 @@
             stage ('Set Variables') {
                 steps {
                     script {
-                        String credentialsId = 'awsCredentials'
+                        env.credentialsId = awsCredentials
                     }
                 }
             }
