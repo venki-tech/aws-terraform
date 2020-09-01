@@ -54,6 +54,12 @@ pipeline {
             }
           }
         }
+
+        stage('Ansible play') {
+          ansiColor('xterm') {
+            sh 'ansible-playbook aws_pb_provision.yaml -i inventory.txt'
+          }
+        }
     }
 
     post {
