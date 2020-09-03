@@ -3,6 +3,7 @@
   vars:
     packages:
       - openjdk-8-jdk
+      - python
   tasks:
     - name: Update all Ubuntu packages
       become: yes
