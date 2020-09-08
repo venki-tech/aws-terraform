@@ -18,10 +18,11 @@ pipeline {
             ]]) {
                 sh '''
                 cd "${WORKSPACE}"
+                git remote set-url origin git@github.com:venki-tech/aws-terraform.git
                 echo "New_File" >> New_File.txt
                 git add New_File.txt
                 git commit -m "Added new file with automated Jenikins job"
-                git push git@github.com:venki-tech/aws-terraform.git
+                git push origin HEAD:master
                 '''
             }
           }
