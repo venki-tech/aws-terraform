@@ -25,11 +25,13 @@ pipeline {
               //sh 'echo -e "y\n" | ssh-keygen -t rsa -N "" -f vvkey'
               sh'''
                 if [[ ! -f ${HOME}/vvkey ]]; then
-                  echo "New keys will be generated"
+                  echo "New keys will be generated, and then copied over"
                   ssh-keygen -t rsa -N "" -f ${HOME}/vvkey
+                  
                 else
-                  echo "Keys already present"
+                  echo "Keys already present, will copy them into workspace"
                 fi
+                cp ${HOME}/vvkey* ${WORKSPACE}/
               '''
           }
         }
