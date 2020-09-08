@@ -18,8 +18,9 @@ pipeline {
             ]]) {
                 sh '''
                 cd "${WORKSPACE}"
-                git add terraform.tfstate
-                git commit -m "Added file with automated Jenikins job"
+                echo "New_File" >> New_File.txt
+                git add New_File.txt
+                git commit -m "Added new file with automated Jenikins job"
                 git push
                 '''
             }
