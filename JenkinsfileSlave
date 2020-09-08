@@ -35,6 +35,20 @@ pipeline {
               '''
           }
         }
+
+        stage('Copy Terraform init files') {
+          steps {
+              sh'''
+                if [[ ! -d ${WORKSPACE}/.terraform]]; then
+                  echo "Terraform init files dont exist."
+                  cp -r ${HOME}/.terraform ${WORKSPACE}/
+                else
+                  echo "terraform init files exits, nothing to do"
+                fi
+              '''
+          }
+        }
+        
 /*
         stage('Terraform init') {
           steps {
