@@ -14,10 +14,9 @@ pipeline {
         stage('Git Push file to Repo') {
           steps {
             withCredentials([[
-              $class: 'UsernamePasswordMultiBinding', credentialsId: "${env:githubCredentialsId}",passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME'
+              $class: 'UsernamePasswordMultiBinding', credentialsId: "${env:githubCredentialsId}"
             ]]) {
                 sh '''
-                cd "${WORKSPACE}"
                 git remote set-url origin git@github.com:venki-tech/aws-terraform.git
                 echo "New_File" >> New_File.txt
                 git add New_File.txt
