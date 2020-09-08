@@ -21,7 +21,7 @@ pipeline {
                 echo "New_File" >> New_File.txt
                 git add New_File.txt
                 git commit -m "Added new file with automated Jenikins job"
-                git push
+                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@aws-terraform 
                 '''
             }
           }
