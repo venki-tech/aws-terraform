@@ -91,7 +91,6 @@ pipeline {
                 sh '''
                 cd "${WORKSPACE}"
                 git remote set-url origin git@github.com:venki-tech/aws-terraform.git
-                echo -e "vvkey*\n.terraform\\" >> .git/info/exclude
                 git add terraform.tfstate* inventory.txt
                 git commit -m "Added terraform state files to repo"
                 git push origin HEAD:master
