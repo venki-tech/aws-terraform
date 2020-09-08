@@ -14,15 +14,14 @@ pipeline {
         stage('Git Push file to Repo') {
           steps {
             withCredentials([[
-              $class: 'UsernamePasswordMultiBinding', credentialsId: "${env:githubCredentialsId}",passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME'
+              $class: 'UsernamePasswordMultiBinding', credentialsId: "${env:githubCredentialsId}", url: 'https://github.com/venki-tech/aws-terraform'
             ]]) {
                 sh '''
                 cd "${WORKSPACE}"
                 echo "New_File" >> New_File.txt
-                git config remote.origin.url https://github.com/venki-tech/aws-terraform.git
                 git add New_File.txt
                 git commit -m "Added new file with automated Jenikins job"
-                git push https://github.com/venki-tech/aws-terraform.git 
+                git push $url
                 '''
             }
           }
