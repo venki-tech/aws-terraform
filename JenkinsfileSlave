@@ -3,7 +3,29 @@ pipeline {
     agent { label 'slave'}
 
     stages {
-    
+        stage ('Set Variables') {
+            steps {
+                script {
+                    env.githubCredentialsId = "github_clone"
+                }
+            }
+        }
+
+        stage('Git Push file to Repo') {
+          steps {
+            withCredentials([[
+              credentialsId: "${env:githubCredentialsId}",passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME'
+            ]]) {
+                sh '''
+                cd "${WORKSPACE}"
+                git add terraform.tfstate
+                git commit -m "Added file with automated Jenikins job"
+                git push
+                '''
+            }
+          }
+        }
+        /*
         stage('checkout') {
           steps {
             cleanWs()
@@ -70,6 +92,7 @@ pipeline {
             }
           }
         }
+        */
     }
 
     post {
