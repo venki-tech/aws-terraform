@@ -14,7 +14,7 @@ pipeline {
         stage('Git Push file to Repo') {
           steps {
             withCredentials([[
-              credentialsId: "${env:githubCredentialsId}",passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME'
+              $class: 'GitSCM', credentialsId: "${env:githubCredentialsId}",passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME'
             ]]) {
                 sh '''
                 cd "${WORKSPACE}"
