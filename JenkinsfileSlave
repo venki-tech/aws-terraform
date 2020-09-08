@@ -24,8 +24,12 @@ pipeline {
           steps {
               //sh 'echo -e "y\n" | ssh-keygen -t rsa -N "" -f vvkey'
               sh'''
-                echo "Printing home dir"
-                echo $HOME
+                if [[ ! -f ${HOME}/vvkey ]]; then
+                  echo "New keys will be generated"
+                  ssh-keygen -t rsa -N "" -f ${HOME}/vvkey
+                else
+                  echo "Keys already present"
+                fi
               '''
           }
         }
