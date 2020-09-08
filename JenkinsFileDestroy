@@ -1,0 +1,102 @@
+pipeline {
+
+    agent { label 'slave'}
+
+    stages {
+
+        stage('checkout') {
+          steps {
+            checkout scm
+          }
+        }
+
+        stage ('Set Variables') {
+            steps {
+                script {
+                    env.credentialsId = "awsCredentials"
+                    env.githubCredentialsId = "github_clone"
+                }
+            }
+        }
+
+        stage('Copy Keys') {
+          steps {
+              //sh 'echo -e "y\n" | ssh-keygen -t rsa -N "" -f vvkey'
+              sh'''
+                if [[ ! -f ${HOME}/vvkey ]]; then
+                  echo "New keys will be generated, and then copied over"
+                  ssh-keygen -t rsa -N "" -f ${HOME}/vvkey
+                  
+                else
+                  echo "Keys already present, will copy them into workspace"
+                fi
+                cp ${HOME}/vvkey* ${WORKSPACE}/
+              '''
+          }
+        }
+
+        stage('Copy Terraform init files') {
+          steps {
+              sh'''
+                if [[ ! -d ${WORKSPACE}/.terraform ]]; then
+                  echo "Terraform init files dont exist."
+                  cp -r ${HOME}/.terraform ${WORKSPACE}/
+                else
+                  echo "terraform init files exits, nothing to do"
+                fi
+              '''
+          }
+        }
+        
+        stage('Terraform init') {
+          steps {
+            withCredentials([[
+              $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+              ansiColor('xterm') {
+                sh 'terraform init'
+              }
+            }
+          }
+        }
+
+        stage('Terraform Destroy') {
+          steps {
+            withCredentials([[
+              $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+              ansiColor('xterm') {
+                sh 'terraform destroy -auto-approve'
+              }
+            }
+          }
+        }
+
+        stage('Git Push terraform.tfstate to Repo') {
+          steps {
+                sh '''
+                cd "${WORKSPACE}"
+                git remote set-url origin git@github.com:venki-tech/aws-terraform.git
+                git add terraform.tfstate*
+                git commit -m "Added terraform state files to repo" || true
+                git push origin HEAD:master
+                '''
+          }
+        }
+    }
+
+    post {
+        success {
+            echo "Success"
+        }
+        unstable {
+            echo "Unstable"
+        }
+        aborted {
+            echo "Aborted"
+        }
+        failure {
+            echo "FAILURE"
+        }
+    }
+}
