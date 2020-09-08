@@ -39,7 +39,7 @@ pipeline {
         stage('Copy Terraform init files') {
           steps {
               sh'''
-                if [[ ! -d ${WORKSPACE}/.terraform]]; then
+                if [[ ! -d ${WORKSPACE}/.terraform ]]; then
                   echo "Terraform init files dont exist."
                   cp -r ${HOME}/.terraform ${WORKSPACE}/
                 else
@@ -49,7 +49,7 @@ pipeline {
           }
         }
         
-/*
+
         stage('Terraform init') {
           steps {
             withCredentials([[
@@ -61,7 +61,7 @@ pipeline {
             }
           }
         }
-
+/*
         stage('Terraform Plan') {
           steps {
             withCredentials([[
