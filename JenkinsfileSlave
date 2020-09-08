@@ -14,7 +14,7 @@ pipeline {
         stage('Git Push file to Repo') {
           steps {
             withCredentials([[
-              $class: 'UsernamePasswordMultiBinding', credentialsId: "${env:githubCredentialsId}", url: 'https://github.com/venki-tech/aws-terraform'
+              $class: 'UsernamePasswordMultiBinding', credentialsId: "${env:githubCredentialsId}",passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME'
             ]]) {
                 sh '''
                 cd "${WORKSPACE}"
