@@ -10,7 +10,7 @@ pipeline {
             checkout scm
           }
         }
-        
+
         stage ('Set Variables') {
             steps {
                 script {
@@ -61,7 +61,7 @@ pipeline {
             }
           }
         }
-/*
+
         stage('Terraform Plan') {
           steps {
             withCredentials([[
@@ -105,13 +105,13 @@ pipeline {
             }
           }
         }
-*/
+
     }
 
     post {
         success {
             echo "Success"
-        }
+        
         unstable {
             echo "Unstable"
         }
