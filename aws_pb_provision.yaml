@@ -14,6 +14,9 @@
     packages:
       - openjdk-8-jdk
       - python3
+      - mysql-client
+      - python-msql.connector
+
   tasks:
     - name: Update all Ubuntu packages
       become: yes
@@ -34,7 +37,6 @@
   vars:
     packages:
       - mysql-server
-      - mysql-client
   tasks:
     - name: Update all Ubuntu packages
       become: yes
