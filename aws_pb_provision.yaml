@@ -8,21 +8,22 @@
       timeout: 120
     delegate_to: localhost
 
+
+
 - name: Install software on u1
   hosts: aws_u1
+  gather_facts: false
   vars:
     packages:
       - openjdk-8-jdk
       - python3
       - mysql-client
-      - python-msql.connector
-
+      - python3-mysql.connector
   tasks:
     - name: Update all Ubuntu packages
       become: yes
       apt:
         upgrade: "dist"
-      when: ansible_distribution == 'Ubuntu'
 
     - name: Install all packages
       become: yes
@@ -32,24 +33,36 @@
         name: "{{ packages }}"
         state: present
 
+
+
 - name: Install software on u2
   hosts: aws_u2
+  gather_facts: false
   vars:
     packages:
       - mysql-server
+      - python-pymysql
+      - python3-pymysql
   tasks:
     - name: Update all Ubuntu packages
       become: yes
       apt:
         upgrade: "dist"
-      when: ansible_distribution == 'Ubuntu'
 
-    - name: Install mysql on u2
+    - name: Install mysql and other packages on u2
       become: yes
       apt:
         update_cache: yes
         name: "{{ packages }}"
         state: present
+
+    - name: Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
+      lineinfile:
+        dest: /etc/mysql/my.cnf
+        regexp: 'bind-address\s*=\s*127\.0\.0\.1\s*'
+        line: 'bind-address   = 0.0.0.0'
+        state: present
+        backrefs: yes
 
     - name: Start mysql service on u2
       become: yes
@@ -57,6 +70,8 @@
         name: mysql
         state: started
         enabled: yes
+
+
 
 - name: Install softwares in aws_rhel
   hosts: aws_rhel1
@@ -66,7 +81,6 @@
     yum:
       name: httpd
       state: present
-
   - name: ensure httpd is running
     become: yes
     service:
