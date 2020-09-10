@@ -98,10 +98,18 @@ pipeline {
           }
         }
 
-        stage('Ansible play') {
+        stage('Ansible Build') {
           steps {
             ansiColor('xterm') {
               sh 'ansible-playbook aws_pb_provision.yaml -i inventory.txt'
+            }
+          }
+        }
+
+        stage('Ansible Deploy') {
+          steps {
+            ansiColor('xterm') {
+              sh 'ansible-playbook aws_u2_mysql_tables_deploy.yaml -i inventory.txt'
             }
           }
         }
