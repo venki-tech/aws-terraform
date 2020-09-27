@@ -1,4 +1,4 @@
 variable "region" {
-  default = "ap-south-1"
+  default = "ap-west-2"
 }
 
