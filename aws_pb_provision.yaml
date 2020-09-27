@@ -41,7 +41,6 @@
   vars:
     packages:
       - mysql-server
-      - python-pymysql
       - python3-pymysql
   tasks:
     - name: Update all Ubuntu packages
