@@ -10,7 +10,7 @@ resource "aws_key_pair" "example" {
 
 resource "aws_instance" "u1" {
   key_name      = aws_key_pair.example.key_name
-  ami           = "ami-02b5fbc2cb28b77b8"
+  ami           = "ami-0fb673bc6ff8fc282"
   instance_type = "t2.micro"
   tags          = {
     Name        = "ubuntu-java"
@@ -30,7 +30,7 @@ resource "aws_instance" "u1" {
 
 resource "aws_instance" "u2" {
   key_name      = aws_key_pair.example.key_name
-  ami           = "ami-02b5fbc2cb28b77b8"
+  ami           = "ami-0fb673bc6ff8fc282"
   instance_type = "t2.micro"
   tags          = {
     Name        = "ubuntu-mysql"
@@ -50,7 +50,7 @@ resource "aws_instance" "u2" {
 
   resource "aws_instance" "rhel1" {
     key_name      = aws_key_pair.example.key_name
-    ami           = "ami-052c08d70def0ac62"
+    ami           = "ami-0fc841be1f929d7d1"
     instance_type = "t2.micro"
     tags          = {
       Name        = "rhel-apache"
