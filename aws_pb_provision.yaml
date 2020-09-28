@@ -56,6 +56,7 @@
         state: present
 
     - name: a - Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
+      become: yes
       lineinfile:
         dest: /etc/mysql/my.cnf
         regexp: 'bind-address\s*=\s*127\.0\.0\.1\s*'
@@ -64,6 +65,7 @@
         backrefs: yes
  
     - name: b - Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
+      become: yes
       lineinfile:
         dest: /etc/mysql/mysql.conf.d/mysqld.cnf
         regexp: 'bind-address\s*=\s*127\.0\.0\.1\s*'
