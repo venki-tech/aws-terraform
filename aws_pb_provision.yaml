@@ -55,13 +55,22 @@
         name: "{{ packages }}"
         state: present
 
-    - name: Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
+    - name: a - Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
       lineinfile:
         dest: /etc/mysql/my.cnf
         regexp: 'bind-address\s*=\s*127\.0\.0\.1\s*'
         line: 'bind-address   = 0.0.0.0'
         state: present
         backrefs: yes
+ 
+    - name: b - Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
+      lineinfile:
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: 'bind-address\s*=\s*127\.0\.0\.1\s*'
+        line: 'bind-address   = 0.0.0.0'
+        state: present
+        backrefs: yes
+
 
     - name: Start mysql service on u2
       become: yes
