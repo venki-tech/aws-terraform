@@ -63,7 +63,7 @@
         line: 'bind-address   = 0.0.0.0'
         state: present
         backrefs: yes
- 
+
     - name: b - Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
       become: yes
       lineinfile:
@@ -73,6 +73,14 @@
         state: present
         backrefs: yes
 
+    - name: c - Update user id from mysql to root
+      become: yes
+      lineinfile:
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: 'user\s*=\s*mysql\s*'
+        line: 'user    = root'
+        state: present
+        backrefs: yes
 
     - name: Start mysql service on u2
       become: yes
