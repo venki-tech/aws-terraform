@@ -1,12 +1,23 @@
 - name: DB updates on u2
   hosts: aws_u2
   tasks:
-    - name: Ensure mysql root password is updated
+    - name: a - Ensure mysql root password is updated for localhost
       become: yes
       no_log: true
       mysql_user:
         name: root
         host: 'localhost'
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        password: Passw0rd!23
+        priv: '*.*:ALL,GRANT'
+        check_implicit_admin: true
+
+    - name: b - Ensure mysql root user is present for all hosts % different to localhost!
+      become: yes
+      no_log: true
+      mysql_user:
+        name: root
+        host: '%'
         login_unix_socket: /var/run/mysqld/mysqld.sock
         password: Passw0rd!23
         priv: '*.*:ALL,GRANT'
