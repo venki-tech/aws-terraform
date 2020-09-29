@@ -8,7 +8,9 @@
       timeout: 120
     delegate_to: localhost
 
-
+  - name: Pause for 1 minutes for instance to come up
+    pause:
+      minutes: 1
 
 - name: Install software on u1
   hosts: aws_u1
@@ -19,6 +21,7 @@
       - python3
       - mysql-client
       - python3-mysql.connector
+      - net-tools
   tasks:
     - name: Update all Ubuntu packages
       become: yes
@@ -42,6 +45,7 @@
     packages:
       - mysql-server
       - python3-pymysql
+      - net-tools
   tasks:
     - name: Update all Ubuntu packages
       become: yes
@@ -82,13 +86,12 @@
         state: present
         backrefs: yes
 
-    - name: Start mysql service on u2
+    - name: Re-Start mysql service on u2
       become: yes
       service:
         name: mysql
-        state: started
+        state: restarted
         enabled: yes
-
 
 
 - name: Install softwares in aws_rhel
