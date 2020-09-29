@@ -6,7 +6,7 @@
       no_log: true
       mysql_user:
         name: root
-        host: 'localhost'
+        host: '%'
         login_unix_socket: /var/run/mysqld/mysqld.sock
         password: Passw0rd!23
         priv: '*.*:ALL,GRANT'
