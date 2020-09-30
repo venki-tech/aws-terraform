@@ -27,7 +27,7 @@ pipeline {
                 if [[ ! -f ${HOME}/vvkey ]]; then
                   echo "New keys will be generated, and then copied over"
                   ssh-keygen -t rsa -N "" -f ${HOME}/vvkey
-                  
+
                 else
                   echo "Keys already present, will copy them into workspace"
                 fi
@@ -48,7 +48,7 @@ pipeline {
               '''
           }
         }
-        
+
 
         stage('Terraform init') {
           steps {
@@ -74,7 +74,7 @@ pipeline {
           }
         }
 
-        stage('Terraform Apply') {
+        stage('Terraform Apply - Build Servers') {
           steps {
             withCredentials([[
               $class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${env:credentialsId}",accessKeyVariable: 'AWS_ACCESS_KEY_ID',secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
@@ -98,18 +98,42 @@ pipeline {
           }
         }
 
-        stage('Ansible Build') {
+        stage('Ansible - Provision App Server') {
           steps {
             ansiColor('xterm') {
-              sh 'ansible-playbook aws_pb_provision.yaml -i inventory.txt'
+              sh 'ansible-playbook aws_ansible_pb_provision_appserver.yaml -i inventory.txt'
             }
           }
         }
 
-        stage('Ansible Deploy') {
+        stage('Ansible - Provision DB Server') {
           steps {
             ansiColor('xterm') {
-              sh 'ansible-playbook aws_u2_mysql_tables_deploy.yaml -i inventory.txt'
+              sh 'ansible-playbook aws_ansible_pb_provision_dbserver.yaml -i inventory.txt'
+            }
+          }
+        }
+
+        stage('Ansible - Provision WEB Server') {
+          steps {
+            ansiColor('xterm') {
+              sh 'ansible-playbook aws_ansible_pb_provision_webserver.yaml -i inventory.txt'
+            }
+          }
+        }
+
+        stage('Ansible - Deploy App Server content') {
+          steps {
+            ansiColor('xterm') {
+              sh 'ansible-playbook aws_ansible_pb_deploy_appserver.yaml -i inventory.txt'
+            }
+          }
+        }
+
+        stage('Ansible - Deploy DB MySQL Server content') {
+          steps {
+            ansiColor('xterm') {
+              sh 'ansible-playbook aws_ansible_pb_deploy_dbserver.yaml -i inventory.txt'
             }
           }
         }
