@@ -81,9 +81,9 @@ pipeline {
                 git add terraform.tfstate*
                 git commit -m "Added terraform state files to repo" || true
                 git push origin HEAD:master
-                mkdir -p ${WORKSPACE}/temp_repo_ws
-                cp terraform.tfstate* ${WORKSPACE}/temp_repo_ws
-                rm -rf ${WORKSPACE}/aws-terraform
+                mkdir -p /tmp/temp_repo_ws
+                cp terraform.tfstate* /tmp/temp_repo_ws
+                rm -rf ${WORKSPACE}/.git ${WORKSPACE}/*
 
                 echo "-------------------------------------"
                 cd ${WORKSPACE}
