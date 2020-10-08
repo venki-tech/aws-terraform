@@ -90,7 +90,7 @@ pipeline {
                 git clone git@github.com:venki-tech/aep-terraform-create-aws.git
                 cd ${WORKSPACE}/aep-terraform-create-aws
                 git pull
-                cp ${WORKSPACE}/temp_repo_ws/* .
+                cp /tmp/temp_repo_ws/* .
                 git add terraform.tfstate*
                 git commit -m "Added terraform state files to repo" || true
                 git push origin HEAD:master
